@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import agencyService from '../services/agencyService';
 import { CreateAgencyDto, Nation, ChannelType } from '../types/agency';
 
 const AgencyForm: React.FC = () => {
+    const navigate = useNavigate();
+
     const initialState: CreateAgencyDto = {
         name: '',
         logoImageUrl: '',
@@ -14,7 +17,6 @@ const AgencyForm: React.FC = () => {
     const [formData, setFormData] = useState<CreateAgencyDto>(initialState);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<boolean>(false);
 
     // 채널 입력 관리
     const [channelType, setChannelType] = useState<ChannelType>(ChannelType.YOUTUBE);
@@ -51,25 +53,16 @@ const AgencyForm: React.FC = () => {
         try {
             setLoading(true);
             setError(null);
-            await agencyService.createAgency(formData);
-            setSuccess(true);
-            setFormData(initialState);
+            const newAgency = await agencyService.createAgency(formData);
+
+            // 성공 시 새로 생성된 에이전시 상세 페이지로 이동
+            navigate(`/agencies/${newAgency.agencyId}`);
         } catch (err: any) {
             setError(err.response?.data?.message || '에이전시 생성에 실패했습니다.');
-            setSuccess(false);
         } finally {
             setLoading(false);
         }
     };
-
-    if (success) {
-        return (
-            <div className="success-message">
-                <h3>에이전시가 성공적으로 생성되었습니다!</h3>
-                <button onClick={() => setSuccess(false)}>새 에이전시 등록하기</button>
-            </div>
-        );
-    }
 
     return (
         <div className="agency-form">
@@ -182,8 +175,6 @@ const AgencyForm: React.FC = () => {
                         </ul>
                     )}
                 </div>
-
-                {/* 추가: VTuber 및 Fandom 선택 기능은 필요시 구현 */}
 
                 <button type="submit" disabled={loading} className="submit-button">
                     {loading ? '처리 중...' : '에이전시 등록'}

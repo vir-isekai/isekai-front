@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import agencyService from '../services/agencyService';
 import { AgencyDetail as AgencyDetailType } from '../types/agency';
 
-interface AgencyDetailProps {
-    agencyId: number;
-    onBack: () => void;
-}
+const AgencyDetail: React.FC = () => {
+    // URL 파라미터에서 agencyId 추출
+    const { agencyId } = useParams<{ agencyId: string }>();
+    const navigate = useNavigate();
 
-const AgencyDetail: React.FC<AgencyDetailProps> = ({ agencyId, onBack }) => {
     const [agency, setAgency] = useState<AgencyDetailType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchAgencyDetail = async () => {
+            if (!agencyId) {
+                setError('유효하지 않은 에이전시 ID입니다.');
+                setLoading(false);
+                return;
+            }
+
             try {
                 setLoading(true);
-                const data = await agencyService.getAgency(agencyId);
+                const id = parseInt(agencyId, 10);
+                const data = await agencyService.getAgency(id);
                 console.log("Agency 상세 정보:", data);
                 setAgency(data);
                 setError(null);
@@ -31,6 +38,11 @@ const AgencyDetail: React.FC<AgencyDetailProps> = ({ agencyId, onBack }) => {
         fetchAgencyDetail();
     }, [agencyId]);
 
+    // 목록으로 돌아가기
+    const handleBackToList = () => {
+        navigate('/');
+    };
+
     if (loading) {
         return <div className="loading">상세 정보 로딩 중...</div>;
     }
@@ -39,7 +51,7 @@ const AgencyDetail: React.FC<AgencyDetailProps> = ({ agencyId, onBack }) => {
         return (
             <div className="error-container">
                 <div className="error-message">{error}</div>
-                <button className="back-button" onClick={onBack}>
+                <button className="back-button" onClick={handleBackToList}>
                     목록으로 돌아가기
                 </button>
             </div>
@@ -50,7 +62,7 @@ const AgencyDetail: React.FC<AgencyDetailProps> = ({ agencyId, onBack }) => {
         return (
             <div className="error-container">
                 <div className="error-message">Agency 정보를 찾을 수 없습니다.</div>
-                <button className="back-button" onClick={onBack}>
+                <button className="back-button" onClick={handleBackToList}>
                     목록으로 돌아가기
                 </button>
             </div>
@@ -59,7 +71,7 @@ const AgencyDetail: React.FC<AgencyDetailProps> = ({ agencyId, onBack }) => {
 
     return (
         <div className="agency-detail">
-            <button className="back-button" onClick={onBack}>
+            <button className="back-button" onClick={handleBackToList}>
                 &larr; 목록으로 돌아가기
             </button>
 

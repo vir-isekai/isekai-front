@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import agencyService from '../services/agencyService';
 import { AgencyEntry } from '../types/agency';
 
-interface AgencyListProps {
-    onAgencySelect: (agencyId: number) => void;
-}
-
-const AgencyList: React.FC<AgencyListProps> = ({ onAgencySelect }) => {
+const AgencyList: React.FC = () => {
     const [agencies, setAgencies] = useState<AgencyEntry[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -16,9 +13,11 @@ const AgencyList: React.FC<AgencyListProps> = ({ onAgencySelect }) => {
             try {
                 setLoading(true);
                 const data = await agencyService.getAgencies();
+                console.log("API 응답 데이터:", data);
                 setAgencies(data || []);
                 setError(null);
             } catch (err) {
+                console.error('에이전시 조회 오류:', err);
                 setError('에이전시 목록을 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);
@@ -27,11 +26,6 @@ const AgencyList: React.FC<AgencyListProps> = ({ onAgencySelect }) => {
 
         fetchAgencies();
     }, []);
-
-    // Agency 이름 클릭 핸들러
-    const handleAgencyClick = (agencyId: number) => {
-        onAgencySelect(agencyId);
-    };
 
     if (loading) {
         return <div className="loading">로딩 중...</div>;
@@ -54,12 +48,14 @@ const AgencyList: React.FC<AgencyListProps> = ({ onAgencySelect }) => {
                                 <img src={agency.logoImageUrl} alt={`${agency.name} 로고`} />
                             </div>
                             <div className="agency-info">
-                                <h3
-                                    onClick={() => handleAgencyClick(agency.agencyId)}
-                                    className="agency-name clickable"
-                                >
-                                    {agency.name}
-                                </h3>
+                                <Link to={`/agencies/${agency.agencyId}`}>
+                                    <h3 className="agency-name clickable">
+                                        {agency.name}
+                                    </h3>
+                                </Link>
+                                <Link to={`/agencies/${agency.agencyId}`} className="view-details-btn">
+                                    상세 정보
+                                </Link>
                             </div>
                         </div>
                     ))}
