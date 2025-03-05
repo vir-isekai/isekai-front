@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import agencyService from '../services/agencyService';
-import { AgencyEntry } from '../types/agency';
+import {AgencyEntry} from '../types/agency';
 
 const AgencyList: React.FC = () => {
     const [agencies, setAgencies] = useState<AgencyEntry[]>([]);
@@ -13,18 +13,16 @@ const AgencyList: React.FC = () => {
             try {
                 setLoading(true);
                 const data = await agencyService.getAgencies();
-                console.log("API 응답 데이터:", data);
                 setAgencies(data || []);
                 setError(null);
             } catch (err) {
-                console.error('에이전시 조회 오류:', err);
                 setError('에이전시 목록을 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchAgencies();
+        void fetchAgencies();
     }, []);
 
     if (loading) {
@@ -38,29 +36,28 @@ const AgencyList: React.FC = () => {
     return (
         <div className="agency-list">
             <h2>에이전시 목록</h2>
-            {!agencies || agencies.length === 0 ? (
-                <p>등록된 에이전시가 없습니다.</p>
-            ) : (
-                <div className="agency-grid">
-                    {agencies.map((agency) => (
-                        <div key={agency.agencyId} className="agency-card">
-                            <div className="agency-logo">
-                                <img src={agency.logoImageUrl} alt={`${agency.name} 로고`} />
+            {!agencies || agencies.length === 0 ?
+                (
+                    <p>등록된 에이전시가 없습니다.</p>
+                ) :
+                (
+                    <div className="agency-grid">
+                        {agencies.map((agency) => (
+                            <div key={agency.agencyId} className="agency-card">
+                                <div className="agency-logo">
+                                    <img src={agency.logoImageUrl} alt={`${agency.name} 로고`}/>
+                                </div>
+                                <div className="agency-info">
+                                    <Link to={`/agencies/${agency.agencyId}`}>
+                                        <h3 className="agency-name clickable">
+                                            {agency.name}
+                                        </h3>
+                                    </Link>
+                                </div>
                             </div>
-                            <div className="agency-info">
-                                <Link to={`/agencies/${agency.agencyId}`}>
-                                    <h3 className="agency-name clickable">
-                                        {agency.name}
-                                    </h3>
-                                </Link>
-                                <Link to={`/agencies/${agency.agencyId}`} className="view-details-btn">
-                                    상세 정보
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
         </div>
     );
 };
