@@ -1,16 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+import homeService from '../services/homeService';
+import {HomeResponse} from '../types/home';
 import '../styles/Home.css';
 
 const Home: React.FC = () => {
-    // 인기 VTuber 목록 (실제로는 API에서 가져올 수 있음)
-    const popularVtubers = [
-        { id: 1, name: '키즈나 아이', agency: 'Hololive', avatarUrl: 'https://via.placeholder.com/60' },
-        { id: 2, name: '가우르 구라', agency: 'Hololive', avatarUrl: 'https://via.placeholder.com/60' },
-        { id: 3, name: '칼리오페 모리', agency: 'Hololive EN', avatarUrl: 'https://via.placeholder.com/60' },
-        { id: 4, name: '짱구', agency: 'VSHOJO', avatarUrl: 'https://via.placeholder.com/60' },
-    ];
-
     // 최근 에이전시 활동 (실제로는 API에서 가져올 수 있음)
     const recentAgencyActivities = [
         { id: 101, name: 'Hololive', activity: '신규 멤버 모집 중', logoUrl: 'https://via.placeholder.com/40' },
@@ -27,6 +21,27 @@ const Home: React.FC = () => {
         { id: 505, title: '음악 VTuber 추천 리스트', author: '음악애호가', likes: 210, comments: 62 },
     ];
 
+
+
+
+
+
+    const [ homeResponse, setHomeResponse ] = useState<HomeResponse>();
+
+    useEffect(() => {
+        const fetchHomeResponse = async () => {
+            try {
+                const data = await homeService.getHomeResponse();
+                setHomeResponse(data);
+            } catch (err) {
+                console.log('에러 발생')
+            }
+        }
+
+        void fetchHomeResponse();
+    }, []);
+
+
     return (
         <div className="home-container">
             {/* 히어로 섹션 */}
@@ -34,29 +49,25 @@ const Home: React.FC = () => {
                 <div className="hero-content">
                     <h1>VTuber World</h1>
                     <p>버츄얼 크리에이터의 세계를 함께 탐험하세요!</p>
-                    <div className="hero-buttons">
-                        <Link to="/agencies" className="hero-button primary">에이전시 탐험</Link>
-                        <Link to="/vtubers" className="hero-button secondary">인기 VTuber</Link>
-                    </div>
                 </div>
             </section>
 
             {/* 커뮤니티 현황 섹션 */}
             <section className="stats-section">
                 <div className="stat-card">
-                    <div className="stat-number">300+</div>
+                    <div className="stat-number">{homeResponse?.countInfo.agency || 0}</div>
                     <div className="stat-label">등록된 에이전시</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-number">5,000+</div>
+                    <div className="stat-number">{homeResponse?.countInfo.vtuber || 0}</div>
                     <div className="stat-label">활동 중인 VTuber</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-number">12만+</div>
+                    <div className="stat-number">{homeResponse?.countInfo.member || 0}</div>
                     <div className="stat-label">커뮤니티 회원</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-number">1.5만+</div>
+                    <div className="stat-number">{homeResponse?.countInfo.visitor || 0}</div>
                     <div className="stat-label">오늘의 방문자</div>
                 </div>
             </section>
@@ -68,13 +79,13 @@ const Home: React.FC = () => {
                     <div className="sidebar-section">
                         <h3>인기 VTuber</h3>
                         <ul className="vtuber-list">
-                            {popularVtubers.map(vtuber => (
-                                <li key={vtuber.id}>
+                            {homeResponse?.popularVtuberInfos?.map(vtuber => (
+                                <li key={vtuber.vtuberInfo.id}>
                                     <div className="vtuber-item">
-                                        <img src={vtuber.avatarUrl} alt={vtuber.name} className="avatar" />
+                                        <img src={vtuber.vtuberInfo.profileImageUrl} alt={vtuber.vtuberInfo.name} className="avatar" />
                                         <div className="vtuber-info">
-                                            <div className="vtuber-name">{vtuber.name}</div>
-                                            <div className="vtuber-agency">{vtuber.agency}</div>
+                                            <div className="vtuber-name">{vtuber.vtuberInfo.name}</div>
+                                            <div className="vtuber-agency">{vtuber.agencyInfo.name}</div>
                                         </div>
                                     </div>
                                 </li>

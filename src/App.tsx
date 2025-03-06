@@ -14,12 +14,12 @@ function App() {
             <div className="App">
                 <header className="App-header">
                     <div className="header-content">
-                        <Link to="/" className="logo">VTuber World</Link>
                         <nav className="main-nav">
                             <Link to="/" className="nav-link">홈</Link>
                             <Link to="/agencies" className="nav-link">에이전시</Link>
-                            <Link to="/vtubers" className="nav-link">VTuber</Link>
+                            <Link to="/vtubers" className="nav-link">버튜버</Link>
                             <Link to="/community" className="nav-link">커뮤니티</Link>
+                            <Link to="/stores" className="nav-link">스토어</Link>
                         </nav>
                     </div>
                 </header>
@@ -44,7 +44,6 @@ function App() {
                         </div>
                         <div className="footer-center">
                             <nav className="footer-nav">
-                                <Link to="/" className="footer-link">홈</Link>
                                 <Link to="/agencies" className="footer-link">에이전시</Link>
                                 <Link to="/vtubers" className="footer-link">VTuber</Link>
                                 <Link to="/community" className="footer-link">커뮤니티</Link>
