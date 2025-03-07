@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import './styles/Agency.css';
-import AgencyList from './components/AgencyList';
-import AgencyForm from './components/AgencyForm';
-import AgencyDetail from './components/AgencyDetail';
+import AgencyList from './components/agency/AgencyList';
+import AgencyForm from './components/agency/AgencyForm';
+import AgencyDetail from './components/agency/AgencyDetail';
 
 function App() {
     return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import agencyService from '../services/agencyService';
-import { AgencyDetail as AgencyDetailType } from '../types/agency';
+import agencyService from '../../services/agencyService';
+import { AgencyDetail as AgencyDetailType } from '../../types/agency';
 
 const AgencyDetail: React.FC = () => {
     // URL 파라미터에서 agencyId 추출

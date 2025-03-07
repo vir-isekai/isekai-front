@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import agencyService from '../services/agencyService';
-import {AgencyEntry} from '../types/agency';
+import agencyService from '../../services/agencyService';
+import {AgencyEntry} from '../../types/agency';
 
 const AgencyList: React.FC = () => {
     const [agencies, setAgencies] = useState<AgencyEntry[]>([]);

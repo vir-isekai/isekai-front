@@ -31,8 +31,8 @@ const Home: React.FC = () => {
     useEffect(() => {
         const fetchHomeResponse = async () => {
             try {
-                const data = await homeService.getHomeResponse();
-                setHomeResponse(data);
+                const data = await homeService.getHomeResponse()
+                setHomeResponse(data)
             } catch (err) {
                 console.log('에러 발생')
             }

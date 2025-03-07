@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import './styles/Agency.css';
 import './styles/Home.css';
-import Home from './pages/Home';
-import AgencyList from './components/AgencyList';
-import AgencyForm from './components/AgencyForm';
-import AgencyDetail from './components/AgencyDetail';
+import Home from './components/Home';
+import AgencyList from './components/agency/AgencyList';
+import AgencyForm from './components/agency/AgencyForm';
+import AgencyDetail from './components/agency/AgencyDetail';
 
 function App() {
     return (
