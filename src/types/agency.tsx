@@ -1,3 +1,6 @@
+import {ChannelType} from "./channel";
+import {VtuberInfo} from "./vtuber";
+
 export enum Nation {
     KOREA = 'KOREA',
     JAPAN = 'JAPAN',
@@ -6,32 +9,17 @@ export enum Nation {
     // 필요한 다른 국가들 추가
 }
 
-export enum ChannelType {
-    YOUTUBE = 'YOUTUBE',
-    TWITCH = 'TWITCH',
-    TWITTER = 'TWITTER',
-    INSTAGRAM = 'INSTAGRAM',
-    DISCORD = 'DISCORD',
-    // 필요한 다른 채널 타입 추가
-}
-
-// Spring 코드에서 제공된 타입에 따른 인터페이스 정의
-export interface VtuberInfo {
-    vtuberId: number;
-    name: string;
-}
-
 export interface FandomInfo {
     fandomId: number;
     name: string;
 }
 
-export interface ChannelInfo {
+interface ChannelInfo {
     type: ChannelType;
     url: string;
 }
 
-export interface AgencyEntry {
+export interface AgencyInfo {
     agencyId: number;
     name: string;
     logoImageUrl: string;

@@ -1,9 +1,9 @@
 import apiService from './api';
-import { AgencyDetail, AgencyEntry, CreateAgencyDto } from '../types/agency';
+import { AgencyDetail, AgencyInfo, CreateAgencyDto } from '../types/agency';
 
 const agencyService = {
     getAgencies: () => {
-        return apiService.get<AgencyEntry[]>('/agencies');
+        return apiService.get<AgencyInfo[]>('/agencies');
     },
 
     getAgency: (id: number) => {

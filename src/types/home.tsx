@@ -1,3 +1,6 @@
+import {VtuberInfo} from "./vtuber";
+import {AgencyInfo} from "./agency";
+
 export interface HomeResponse {
     countInfo: CountInfo;
     popularVtuberInfos: PopularVtuberInfo[];
@@ -13,15 +16,4 @@ export interface CountInfo {
 export interface PopularVtuberInfo {
     vtuberInfo: VtuberInfo;
     agencyInfo: AgencyInfo;
-}
-
-export interface VtuberInfo {
-    id: number;
-    name: string;
-    profileImageUrl: string;
-}
-
-export interface AgencyInfo {
-    id: number;
-    name: string;
 }

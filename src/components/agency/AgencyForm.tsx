@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import agencyService from '../../services/agencyService';
-import { CreateAgencyDto, Nation, ChannelType } from '../../types/agency';
+import { CreateAgencyDto, Nation } from '../../types/agency';
+import {ChannelType} from "../../types/channel";
 
 const AgencyForm: React.FC = () => {
     const navigate = useNavigate();

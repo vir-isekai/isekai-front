@@ -80,7 +80,7 @@ const Home: React.FC = () => {
                         <h3>인기 VTuber</h3>
                         <ul className="vtuber-list">
                             {homeResponse?.popularVtuberInfos?.map(vtuber => (
-                                <li key={vtuber.vtuberInfo.id}>
+                                <li key={vtuber.vtuberInfo.vtuberId}>
                                     <div className="vtuber-item">
                                         <img src={vtuber.vtuberInfo.profileImageUrl} alt={vtuber.vtuberInfo.name} className="avatar" />
                                         <div className="vtuber-info">

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import agencyService from '../../services/agencyService';
 import { AgencyDetail as AgencyDetailType } from '../../types/agency';
 
-const AgencyDetail: React.FC = () => {
+const VtuberDetail: React.FC = () => {
     // URL 파라미터에서 agencyId 추출
     const { agencyId } = useParams<{ agencyId: string }>();
     const navigate = useNavigate();
@@ -134,4 +134,4 @@ const AgencyDetail: React.FC = () => {
     );
 };
 
-export default AgencyDetail;
+export default VtuberDetail;

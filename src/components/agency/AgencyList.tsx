@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import agencyService from '../../services/agencyService';
-import {AgencyEntry} from '../../types/agency';
+import {AgencyInfo} from '../../types/agency';
 
 const AgencyList: React.FC = () => {
-    const [agencies, setAgencies] = useState<AgencyEntry[]>([]);
+    const [agencies, setAgencies] = useState<AgencyInfo[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
