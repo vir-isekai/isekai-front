@@ -1,4 +1,4 @@
-import apiService from './api';
+import apiService from './apiService';
 import {HomeResponse} from '../types/home';
 
 const homeService = {

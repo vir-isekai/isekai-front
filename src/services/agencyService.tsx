@@ -1,4 +1,4 @@
-import apiService from './api';
+import apiService from './apiService';
 import { AgencyDetail, AgencyInfo, CreateAgencyDto } from '../types/agency';
 
 const agencyService = {

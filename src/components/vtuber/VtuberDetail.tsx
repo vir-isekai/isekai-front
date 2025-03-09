@@ -5,7 +5,7 @@ import { AgencyDetail as AgencyDetailType } from '../../types/agency';
 
 const VtuberDetail: React.FC = () => {
     // URL 파라미터에서 agencyId 추출
-    const { agencyId } = useParams<{ agencyId: string }>();
+    const { vtuberId } = useParams<{ vtuberId: string }>();
     const navigate = useNavigate();
 
     const [agency, setAgency] = useState<AgencyDetailType | null>(null);
@@ -14,7 +14,7 @@ const VtuberDetail: React.FC = () => {
 
     useEffect(() => {
         const fetchAgencyDetail = async () => {
-            if (!agencyId) {
+            if (!vtuberId) {
                 setError('유효하지 않은 에이전시 ID입니다.');
                 setLoading(false);
                 return;
@@ -22,7 +22,7 @@ const VtuberDetail: React.FC = () => {
 
             try {
                 setLoading(true);
-                const id = parseInt(agencyId, 10);
+                const id = parseInt(vtuberId, 10);
                 const data = await agencyService.getAgency(id);
                 console.log("Agency 상세 정보:", data);
                 setAgency(data);
@@ -36,7 +36,7 @@ const VtuberDetail: React.FC = () => {
         };
 
         fetchAgencyDetail();
-    }, [agencyId]);
+    }, [vtuberId]);
 
     // 목록으로 돌아가기
     const handleBackToList = () => {
