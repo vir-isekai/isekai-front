@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import agencyService from '../../services/agencyService';
-import { AgencyDetail as AgencyDetailType } from '../../types/agency';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import vtuberService from '../../services/vtuberService';
+import { VtuberDetail as VtuberDetailType } from '../../types/vtuber';
+import '../styles/VtuberDetail.css';
 
 const VtuberDetail: React.FC = () => {
-    // URL 파라미터에서 agencyId 추출
     const { vtuberId } = useParams<{ vtuberId: string }>();
     const navigate = useNavigate();
 
-    const [agency, setAgency] = useState<AgencyDetailType | null>(null);
+    const [vtuber, setVtuber] = useState<VtuberDetailType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchAgencyDetail = async () => {
+        const fetchVtuberDetail = async () => {
             if (!vtuberId) {
-                setError('유효하지 않은 에이전시 ID입니다.');
+                setError('유효하지 않은 VTuber ID입니다.');
                 setLoading(false);
                 return;
             }
@@ -23,24 +23,42 @@ const VtuberDetail: React.FC = () => {
             try {
                 setLoading(true);
                 const id = parseInt(vtuberId, 10);
-                const data = await agencyService.getAgency(id);
-                console.log("Agency 상세 정보:", data);
-                setAgency(data);
+                const data = await vtuberService.getVtuber(id);
+                console.log("VTuber 상세 정보:", data);
+                setVtuber(data);
                 setError(null);
             } catch (err) {
-                console.error('Agency 상세 조회 오류:', err);
-                setError('Agency 상세 정보를 불러오는데 실패했습니다.');
+                console.error('VTuber 상세 조회 오류:', err);
+                setError('VTuber 상세 정보를 불러오는데 실패했습니다.');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchAgencyDetail();
+        void fetchVtuberDetail();
     }, [vtuberId]);
 
     // 목록으로 돌아가기
     const handleBackToList = () => {
-        navigate('/');
+        navigate('/vtubers');
+    };
+
+    // 채널 아이콘 매핑
+    const getChannelIcon = (type: string) => {
+        switch (type) {
+            case 'YOUTUBE':
+                return '📺';
+            case 'TWITCH':
+                return '🎮';
+            case 'TWITTER':
+                return '🐦';
+            case 'INSTAGRAM':
+                return '📸';
+            case 'DISCORD':
+                return '💬';
+            default:
+                return '🔗';
+        }
     };
 
     if (loading) {
@@ -58,10 +76,10 @@ const VtuberDetail: React.FC = () => {
         );
     }
 
-    if (!agency) {
+    if (!vtuber) {
         return (
             <div className="error-container">
-                <div className="error-message">Agency 정보를 찾을 수 없습니다.</div>
+                <div className="error-message">VTuber 정보를 찾을 수 없습니다.</div>
                 <button className="back-button" onClick={handleBackToList}>
                     목록으로 돌아가기
                 </button>
@@ -70,63 +88,129 @@ const VtuberDetail: React.FC = () => {
     }
 
     return (
-        <div className="agency-detail">
+        <div className="vtuber-detail-container">
             <button className="back-button" onClick={handleBackToList}>
                 &larr; 목록으로 돌아가기
             </button>
 
-            <div className="agency-detail-header">
-                <div className="agency-detail-logo">
-                    <img src={agency.logoImageUrl} alt={`${agency.name} 로고`} />
+            <div className="vtuber-profile-header">
+                <div className="vtuber-avatar-large">
+                    <img src={vtuber.profileImageUrl} alt={vtuber.name} />
                 </div>
-                <div className="agency-detail-title">
-                    <h2>{agency.name}</h2>
-                    <p className="agency-nation">{agency.nation}</p>
+                <div className="vtuber-header-info">
+                    <h1>{vtuber.name}</h1>
+
+                    {vtuber.agency && (
+                        <div className="vtuber-agency-badge">
+                            <img
+                                src={vtuber.agency.logoImageUrl}
+                                alt={vtuber.agency.name}
+                                className="agency-logo-small"
+                            />
+                            <Link to={`/agencies/${vtuber.agency.agencyId}`}>
+                                {vtuber.agency.name}
+                            </Link>
+                        </div>
+                    )}
+
+                    {vtuber.catchphrase && (
+                        <div className="catchphrase">"{vtuber.catchphrase}"</div>
+                    )}
+
+                    <div className="vtuber-stats">
+                        <div className="stat-item">
+                            <span className="stat-label">데뷔일</span>
+                            <span className="stat-value">{new Date(vtuber.debutDate).toLocaleDateString()}</span>
+                        </div>
+
+                        {vtuber.graduationDate && (
+                            <div className="stat-item">
+                                <span className="stat-label">졸업일</span>
+                                <span className="stat-value">{new Date(vtuber.graduationDate).toLocaleDateString()}</span>
+                            </div>
+                        )}
+
+                        {vtuber.birthday && (
+                            <div className="stat-item">
+                                <span className="stat-label">생일</span>
+                                <span className="stat-value">{vtuber.birthday}</span>
+                            </div>
+                        )}
+
+                        {vtuber.height && (
+                            <div className="stat-item">
+                                <span className="stat-label">키</span>
+                                <span className="stat-value">{vtuber.height}cm</span>
+                            </div>
+                        )}
+
+                        {vtuber.fanName && (
+                            <div className="stat-item">
+                                <span className="stat-label">팬 이름</span>
+                                <span className="stat-value">{vtuber.fanName}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="vtuber-tags">
+                        {vtuber.tags.map((tag, index) => (
+                            <span key={index} className="tag">{tag}</span>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            <div className="agency-detail-info">
-                <div className="info-section">
-                    <h3>일반 정보</h3>
-                    <p><strong>설립일:</strong> {new Date(agency.establishedDate).toLocaleDateString()}</p>
-                    {agency.closedDate && (
-                        <p><strong>폐업일:</strong> {new Date(agency.closedDate).toLocaleDateString()}</p>
+            <div className="vtuber-content-grid">
+                <div className="vtuber-description-card">
+                    <h2>프로필</h2>
+                    <div className="description-content">
+                        {vtuber.description.split('\n').map((paragraph, idx) => (
+                            <p key={idx}>{paragraph}</p>
+                        ))}
+                    </div>
+
+                    {vtuber.nicknames.length > 0 && (
+                        <div className="nicknames-section">
+                            <h3>별명</h3>
+                            <div className="nicknames-list">
+                                {vtuber.nicknames.map((nickname, idx) => (
+                                    <span key={idx} className="nickname-badge">{nickname}</span>
+                                ))}
+                            </div>
+                        </div>
                     )}
                 </div>
 
-                {agency.vtuberInfos && agency.vtuberInfos.length > 0 && (
-                    <div className="info-section">
-                        <h3>소속 VTuber</h3>
-                        <ul className="vtuber-detail-list">
-                            {agency.vtuberInfos.map((vtuber) => (
-                                <li key={vtuber.vtuberId}>
-                                    <span className="vtuber-name">{vtuber.name}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                <div className="vtuber-channels-card">
+                    <h2>채널 목록</h2>
+                    <ul className="channels-list">
+                        {vtuber.channelInfos.map((channel, idx) => (
+                            <li key={idx} className="channel-item">
+                                <span className="channel-icon">{getChannelIcon(channel.type)}</span>
+                                <span className="channel-type">{channel.type}</span>
+                                <a href={channel.url} target="_blank" rel="noopener noreferrer" className="channel-link">
+                                    {channel.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
+                                </a>
+                                {channel.followerCount && (
+                                    <span className="follower-count">{channel.followerCount.toLocaleString()} 팔로워</span>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                {agency.fandomInfo && (
-                    <div className="info-section">
-                        <h3>팬덤 정보</h3>
-                        <p><strong>팬덤명:</strong> {agency.fandomInfo.name}</p>
-                    </div>
-                )}
-
-                {agency.channelInfos && agency.channelInfos.length > 0 && (
-                    <div className="info-section">
-                        <h3>공식 채널</h3>
-                        <ul className="channel-detail-list">
-                            {agency.channelInfos.map((channel, index) => (
-                                <li key={index}>
-                                    <strong>{channel.type}:</strong>{' '}
-                                    <a href={channel.url} target="_blank" rel="noopener noreferrer">
-                                        {channel.url}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+                {vtuber.agency && (
+                    <div className="vtuber-agency-card">
+                        <h2>소속 에이전시</h2>
+                        <div className="agency-card-content">
+                            <img src={vtuber.agency.logoImageUrl} alt={vtuber.agency.name} className="agency-logo" />
+                            <div className="agency-info">
+                                <h3>{vtuber.agency.name}</h3>
+                                <Link to={`/agencies/${vtuber.agency.agencyId}`} className="view-agency-link">
+                                    에이전시 상세 정보
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

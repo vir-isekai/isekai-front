@@ -4,6 +4,7 @@ import {FandomInfo, Nation} from "./agency";
 export interface VtuberDetail {
     name: string,
     age: number,
+    profileImageUrl: string,
     height: number,
     fandom: FandomInfo,
     race: string,
