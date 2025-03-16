@@ -100,21 +100,17 @@ const VtuberDetail: React.FC = () => {
                 <div className="vtuber-header-info">
                     <h1>{vtuber.name}</h1>
 
-                    {vtuber.agency && (
+                    {vtuber.agencyInfo && (
                         <div className="vtuber-agency-badge">
                             <img
-                                src={vtuber.agency.logoImageUrl}
-                                alt={vtuber.agency.name}
+                                src={vtuber.agencyInfo.logoImageUrl}
+                                alt={vtuber.agencyInfo.name}
                                 className="agency-logo-small"
                             />
-                            <Link to={`/agencies/${vtuber.agency.agencyId}`}>
-                                {vtuber.agency.name}
+                            <Link to={`/agencies/${vtuber.agencyInfo.agencyId}`}>
+                                {vtuber.agencyInfo.name}
                             </Link>
                         </div>
-                    )}
-
-                    {vtuber.catchphrase && (
-                        <div className="catchphrase">"{vtuber.catchphrase}"</div>
                     )}
 
                     <div className="vtuber-stats">
@@ -123,17 +119,10 @@ const VtuberDetail: React.FC = () => {
                             <span className="stat-value">{new Date(vtuber.debutDate).toLocaleDateString()}</span>
                         </div>
 
-                        {vtuber.graduationDate && (
+                        {vtuber.graduateDate && (
                             <div className="stat-item">
                                 <span className="stat-label">졸업일</span>
-                                <span className="stat-value">{new Date(vtuber.graduationDate).toLocaleDateString()}</span>
-                            </div>
-                        )}
-
-                        {vtuber.birthday && (
-                            <div className="stat-item">
-                                <span className="stat-label">생일</span>
-                                <span className="stat-value">{vtuber.birthday}</span>
+                                <span className="stat-value">{new Date(vtuber.graduateDate).toLocaleDateString()}</span>
                             </div>
                         )}
 
@@ -144,42 +133,17 @@ const VtuberDetail: React.FC = () => {
                             </div>
                         )}
 
-                        {vtuber.fanName && (
+                        {vtuber.fandomInfo && (
                             <div className="stat-item">
                                 <span className="stat-label">팬 이름</span>
-                                <span className="stat-value">{vtuber.fanName}</span>
+                                <span className="stat-value">{vtuber.fandomInfo.name}</span>
                             </div>
                         )}
-                    </div>
-
-                    <div className="vtuber-tags">
-                        {vtuber.tags.map((tag, index) => (
-                            <span key={index} className="tag">{tag}</span>
-                        ))}
                     </div>
                 </div>
             </div>
 
             <div className="vtuber-content-grid">
-                <div className="vtuber-description-card">
-                    <h2>프로필</h2>
-                    <div className="description-content">
-                        {vtuber.description.split('\n').map((paragraph, idx) => (
-                            <p key={idx}>{paragraph}</p>
-                        ))}
-                    </div>
-
-                    {vtuber.nicknames.length > 0 && (
-                        <div className="nicknames-section">
-                            <h3>별명</h3>
-                            <div className="nicknames-list">
-                                {vtuber.nicknames.map((nickname, idx) => (
-                                    <span key={idx} className="nickname-badge">{nickname}</span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
 
                 <div className="vtuber-channels-card">
                     <h2>채널 목록</h2>
@@ -191,22 +155,19 @@ const VtuberDetail: React.FC = () => {
                                 <a href={channel.url} target="_blank" rel="noopener noreferrer" className="channel-link">
                                     {channel.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
                                 </a>
-                                {channel.followerCount && (
-                                    <span className="follower-count">{channel.followerCount.toLocaleString()} 팔로워</span>
-                                )}
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                {vtuber.agency && (
+                {vtuber.agencyInfo && (
                     <div className="vtuber-agency-card">
                         <h2>소속 에이전시</h2>
                         <div className="agency-card-content">
-                            <img src={vtuber.agency.logoImageUrl} alt={vtuber.agency.name} className="agency-logo" />
+                            <img src={vtuber.agencyInfo.logoImageUrl} alt={vtuber.agencyInfo.name} className="agency-logo" />
                             <div className="agency-info">
-                                <h3>{vtuber.agency.name}</h3>
-                                <Link to={`/agencies/${vtuber.agency.agencyId}`} className="view-agency-link">
+                                <h3>{vtuber.agencyInfo.name}</h3>
+                                <Link to={`/agencies/${vtuber.agencyInfo.agencyId}`} className="view-agency-link">
                                     에이전시 상세 정보
                                 </Link>
                             </div>

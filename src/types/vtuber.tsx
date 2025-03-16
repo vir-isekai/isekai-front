@@ -1,15 +1,16 @@
 import {ChannelInfo, ChannelType} from "./channel";
-import {FandomInfo, Nation} from "./agency";
+import {AgencyInfo, FandomInfo, Nation} from "./agency";
 
 export interface VtuberDetail {
     name: string,
     age: number,
     profileImageUrl: string,
     height: number,
-    fandom: FandomInfo,
     race: string,
     debutDate: string,
     graduateDate: string,
+    agencyInfo: AgencyInfo,
+    fandomInfo: FandomInfo,
     channelInfos: ChannelInfo[],
 }
 
