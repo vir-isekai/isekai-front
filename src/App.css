@@ -114,6 +114,7 @@
 .main-nav {
     display: flex;
     gap: 1.5rem;
+    align-items: center;
 }
 
 .main-nav .nav-link {
@@ -142,6 +143,10 @@
 
 .main-nav .nav-link:hover::after {
     width: 100%;
+}
+
+.main-nav .login-link {
+    margin-left: auto;
 }
 
 .App-footer {

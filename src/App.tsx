@@ -3,15 +3,22 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import './styles/Agency.css';
 import './styles/Home.css';
+import './styles/LoginPage.css';
+import './styles/KakaoLoginButton.css';
 import Home from './components/Home';
 import AgencyList from './components/agency/AgencyList';
 import AgencyForm from './components/agency/AgencyForm';
 import AgencyDetail from './components/agency/AgencyDetail';
+import LoginPage from './components/auth/LoginPage';
+import KakaoCallback from './components/auth/KakaoCallback';
+import Logout from './components/auth/Logout';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-function App() {
+function AppContent() {
+    const { isAuthenticated } = useAuth();
+
     return (
-        <Router>
-            <div className="App">
+        <div className="App">
                 <header className="App-header">
                     <div className="header-content">
                         <nav className="main-nav">
@@ -20,6 +27,11 @@ function App() {
                             <Link to="/vtubers" className="nav-link">버튜버</Link>
                             <Link to="/community" className="nav-link">커뮤니티</Link>
                             <Link to="/stores" className="nav-link">스토어</Link>
+                            {isAuthenticated ? (
+                                <Logout />
+                            ) : (
+                                <Link to="/login" className="nav-link login-link">로그인</Link>
+                            )}
                         </nav>
                     </div>
                 </header>
@@ -32,6 +44,13 @@ function App() {
                     <Route path="/agencies" element={<AgencyList />} />
                     <Route path="/agencies/create" element={<AgencyForm />} />
                     <Route path="/agencies/:agencyId" element={<AgencyDetail />} />
+
+                    {/* 로그인 관련 라우트 */}
+                    <Route path="/login" element={<LoginPage />} />
+                    {/* 카카오 로그인 콜백 처리 */}
+                    <Route path="/api/auth/kakao/callback" element={<KakaoCallback />} />
+                    {/* 백엔드 URL과 일치하는 경로도 처리 */}
+                    <Route path="/oauth/callback/kakao" element={<KakaoCallback />} />
 
                     {/* 향후 추가될 VTuber, 커뮤니티 라우트를 위한 자리 */}
                 </Routes>
@@ -55,7 +74,16 @@ function App() {
                     </div>
                 </footer>
             </div>
-        </Router>
+    );
+}
+
+function App() {
+    return (
+        <AuthProvider>
+            <Router>
+                <AppContent />
+            </Router>
+        </AuthProvider>
     );
 }
 

@@ -7,9 +7,9 @@ import '../styles/Home.css';
 const Home: React.FC = () => {
     // 최근 에이전시 활동 (실제로는 API에서 가져올 수 있음)
     const recentAgencyActivities = [
-        { id: 101, name: 'Hololive', activity: '신규 멤버 모집 중', logoUrl: 'https://via.placeholder.com/40' },
-        { id: 102, name: 'Nijisanji', activity: '첫 월드 투어 발표', logoUrl: 'https://via.placeholder.com/40' },
-        { id: 103, name: 'VShojo', activity: '팬 페스티벌 개최', logoUrl: 'https://via.placeholder.com/40' },
+        { id: 101, name: 'Hololive', activity: '신규 멤버 모집 중', logoUrl: 'https://placehold.co/40x40' },
+        { id: 102, name: 'Nijisanji', activity: '첫 월드 투어 발표', logoUrl: 'https://placehold.co/40x40' },
+        { id: 103, name: 'VShojo', activity: '팬 페스티벌 개최', logoUrl: 'https://placehold.co/40x40' },
     ];
 
     // 인기 커뮤니티 게시글 (실제로는 API에서 가져올 수 있음)
@@ -20,11 +20,6 @@ const Home: React.FC = () => {
         { id: 504, title: '다가오는 VTuber 콜라보 일정 정리', author: '일정관리자', likes: 145, comments: 38 },
         { id: 505, title: '음악 VTuber 추천 리스트', author: '음악애호가', likes: 210, comments: 62 },
     ];
-
-
-
-
-
 
     const [ homeResponse, setHomeResponse ] = useState<HomeResponse>();
 
@@ -79,8 +74,8 @@ const Home: React.FC = () => {
                     <div className="sidebar-section">
                         <h3>인기 VTuber</h3>
                         <ul className="vtuber-list">
-                            {homeResponse?.popularVtuberInfos?.map(vtuber => (
-                                <li key={vtuber.vtuberInfo.vtuberId}>
+                            {homeResponse?.popularVtuberInfos?.map((vtuber, index) => (
+                                <li key={vtuber.vtuberInfo.vtuberId || `vtuber-${index}`}>
                                     <div className="vtuber-item">
                                         <img src={vtuber.vtuberInfo.profileImageUrl} alt={vtuber.vtuberInfo.name} className="avatar" />
                                         <div className="vtuber-info">
