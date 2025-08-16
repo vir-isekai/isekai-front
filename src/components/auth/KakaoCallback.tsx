@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { saveToken } from '../../services/authService';
 import AdditionalInfoForm from './AdditionalInfoForm';
+
+// 컴포넌트 외부에 플래그 선언 (더 강력한 중복 방지)
+let globalIsProcessing = false;
+let processedCode: string | null = null; // 이미 처리한 코드 저장
 
 function KakaoCallback() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
   const [tempToken, setTempToken] = useState<string | null>(null);
+  const isProcessing = useRef(false); // useRef로 변경하여 렌더링 간 값 유지
   
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    console.log('KakaoCallback 컴포넌트가 마운트됨');
-    
     const fetchToken = async () => {
       // URL에서 인증 코드 추출
       const searchParams = new URLSearchParams(location.search);
@@ -29,6 +32,25 @@ function KakaoCallback() {
         setLoading(false);
         return;
       }
+
+      // 이미 처리한 코드인지 확인
+      if (processedCode === code) {
+        console.log('이미 처리한 코드입니다. 중복 처리를 방지합니다.');
+        return;
+      }
+
+      // 이미 처리 중이면 종료 (중복 호출 방지 - 전역 플래그와 ref 둘 다 체크)
+      if (globalIsProcessing || isProcessing.current) {
+        console.log('이미 처리 중입니다. 중복 호출을 방지합니다.');
+        return;
+      }
+      
+      console.log('KakaoCallback 컴포넌트가 마운트됨');
+      
+      // 처리 시작 플래그 설정 (전역 변수와 useRef 둘 다 설정)
+      globalIsProcessing = true;
+      isProcessing.current = true;
+      processedCode = code; // 처리 중인 코드 저장
       
       try {
         console.log("백엔드 API 호출 시작");
@@ -77,11 +99,18 @@ function KakaoCallback() {
         setError('로그인 처리 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
+        // isProcessing.current = false를 의도적으로 하지 않음
+        // 한 번 처리가 시작되면 컴포넌트가 언마운트될 때까지 재처리를 방지
       }
     };
     
     fetchToken();
-  }, [location, login, navigate]);
+
+    // Cleanup: 컴포넌트 언마운트 시 전역 플래그 리셋
+    return () => {
+      globalIsProcessing = false;
+    };
+  }, []); // 빈 배열로 변경 - 컴포넌트 마운트 시 단 한 번만 실행
 
   if (loading) {
     return (

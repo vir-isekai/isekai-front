@@ -49,8 +49,6 @@ function AppContent() {
                     <Route path="/login" element={<LoginPage />} />
                     {/* 카카오 로그인 콜백 처리 */}
                     <Route path="/api/auth/kakao/callback" element={<KakaoCallback />} />
-                    {/* 백엔드 URL과 일치하는 경로도 처리 */}
-                    <Route path="/oauth/callback/kakao" element={<KakaoCallback />} />
 
                     {/* 향후 추가될 VTuber, 커뮤니티 라우트를 위한 자리 */}
                 </Routes>
