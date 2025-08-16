@@ -83,7 +83,7 @@ export const apiService = {
 // 인터셉터 설정 (JWT 토큰 등을 위한)
 apiClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('accessToken');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
