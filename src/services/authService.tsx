@@ -59,27 +59,12 @@ export const refreshToken = async (): Promise<string | null> => {
   }
 };
 
-// 카카오 로그인 URL 생성 함수 (실제 구현에서는 설정에서 가져올 수 있음)
 export const getKakaoLoginUrl = (): string => {
-  // 이 값들은 실제 카카오 개발자 계정의 앱에서 가져와야 합니다
-  const KAKAO_CLIENT_ID = '70b5d2ebdeab88e65b4caa45fa39df78';
+  const KAKAO_REST_API_KEY = '70b5d2ebdeab88e65b4caa45fa39df78';
   
-  // 카카오 개발자 콘솔에 등록된 URI와 일치해야 함
-  // 개발 환경에 따라 리다이렉트 URI를 결정
-  let REDIRECT_URI;
-  
-  // 로컬 개발 환경일 경우
-  if (window.location.hostname === 'localhost') {
-    console.log('로컬 개발 환경에서 카카오 로그인 사용');
-    // React 라우트와 일치하는 경로
-    REDIRECT_URI = encodeURIComponent(window.location.origin + '/api/auth/kakao/callback');
-  } else {
-    // 프로덕션 환경
-    console.log('프로덕션 환경에서 카카오 로그인 사용');
-    REDIRECT_URI = encodeURIComponent(window.location.origin + '/oauth/callback/kakao');
-  }
+  let REDIRECT_URI= encodeURIComponent(window.location.origin + '/api/auth/kakao/callback');
   
   console.log('카카오 리다이렉트 URI:', decodeURIComponent(REDIRECT_URI));
-  
-  return `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  return `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 };
